@@ -149,6 +149,8 @@ func (p *Parser) parseExpression(bp bindingPower) (left ast.Expr, err error) {
 		left, err = parseRegexPattern(p)
 	case lexer.SortBy:
 		left, err = parseSortBy(p)
+	case lexer.GroupBy:
+		left, err = parseGroupBy(p)
 	case lexer.Any:
 		left, err = parseAny(p)
 	case lexer.All:

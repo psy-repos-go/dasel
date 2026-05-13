@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing.
+### Added
+
+- `groupBy(expr)` function to group array elements by a derived key expression, producing a map of key to matching elements.
 
 ## [v3.8.1] - 2026-04-30
 

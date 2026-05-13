@@ -123,6 +123,12 @@ type SortByExpr struct {
 
 func (SortByExpr) expr() {}
 
+type GroupByExpr struct {
+	Expr Expr
+}
+
+func (GroupByExpr) expr() {}
+
 type AnyExpr struct {
 	Expr Expr
 }

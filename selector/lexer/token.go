@@ -62,6 +62,7 @@ const (
 	Search
 	RegexPattern
 	SortBy
+	GroupBy
 	Any
 	All
 	Count

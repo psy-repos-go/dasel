@@ -143,6 +143,8 @@ func exprExecutor(options *Options, expr ast.Expr) (expressionExecutor, error) {
 		}, nil
 	case ast.SortByExpr:
 		return sortByExprExecutor(e)
+	case ast.GroupByExpr:
+		return groupByExprExecutor(e)
 	case ast.AnyExpr:
 		return anyExprExecutor(e)
 	case ast.AllExpr:
