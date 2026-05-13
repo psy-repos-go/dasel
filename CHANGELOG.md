@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.10.1] - 2026-05-13
+
 ### Fixed
 
 - Fixed a non-terminating loop in the selector lexer when tokenizing unterminated regex patterns (e.g. `r/abc`). The tokenizer now returns an error instead of looping indefinitely.
@@ -884,7 +886,8 @@ See [documentation](https://daseldocs.tomwright.me) for all changes.
 
 - Everything!
 
-[unreleased]: https://github.com/TomWright/dasel/compare/v3.10.0...HEAD
+[unreleased]: https://github.com/TomWright/dasel/compare/v3.10.1...HEAD
+[v3.10.1]: https://github.com/TomWright/dasel/compare/v3.10.0...v3.10.1
 [v3.10.0]: https://github.com/TomWright/dasel/compare/v3.9.0...v3.10.0
 [v3.9.0]: https://github.com/TomWright/dasel/compare/v3.8.1...v3.9.0
 [v3.8.1]: https://github.com/TomWright/dasel/compare/v3.8.0...v3.8.1
