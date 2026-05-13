@@ -319,6 +319,12 @@ func (p *Tokenizer) parseCurRune() (Token, error) {
 		if t := matchStr(pos, "groupBy", false, GroupBy); t != nil {
 			return *t, nil
 		}
+		if t := matchStr(pos, "reduce", false, Reduce); t != nil {
+			return *t, nil
+		}
+		if t := matchStr(pos, "mapValues", false, MapValues); t != nil {
+			return *t, nil
+		}
 		if t := matchStr(pos, "any", false, Any); t != nil {
 			return *t, nil
 		}

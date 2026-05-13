@@ -151,6 +151,10 @@ func (p *Parser) parseExpression(bp bindingPower) (left ast.Expr, err error) {
 		left, err = parseSortBy(p)
 	case lexer.GroupBy:
 		left, err = parseGroupBy(p)
+	case lexer.Reduce:
+		left, err = parseReduce(p)
+	case lexer.MapValues:
+		left, err = parseMapValues(p)
 	case lexer.Any:
 		left, err = parseAny(p)
 	case lexer.All:

@@ -129,6 +129,20 @@ type GroupByExpr struct {
 
 func (GroupByExpr) expr() {}
 
+type ReduceExpr struct {
+	Expr   Expr
+	Init   Expr
+	Update Expr
+}
+
+func (ReduceExpr) expr() {}
+
+type MapValuesExpr struct {
+	Expr Expr
+}
+
+func (MapValuesExpr) expr() {}
+
 type AnyExpr struct {
 	Expr Expr
 }

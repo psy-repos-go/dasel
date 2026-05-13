@@ -63,6 +63,8 @@ const (
 	RegexPattern
 	SortBy
 	GroupBy
+	Reduce
+	MapValues
 	Any
 	All
 	Count

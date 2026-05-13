@@ -145,6 +145,10 @@ func exprExecutor(options *Options, expr ast.Expr) (expressionExecutor, error) {
 		return sortByExprExecutor(e)
 	case ast.GroupByExpr:
 		return groupByExprExecutor(e)
+	case ast.ReduceExpr:
+		return reduceExprExecutor(e)
+	case ast.MapValuesExpr:
+		return mapValuesExprExecutor(e)
 	case ast.AnyExpr:
 		return anyExprExecutor(e)
 	case ast.AllExpr:
