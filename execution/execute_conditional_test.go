@@ -53,4 +53,14 @@ func TestConditional(t *testing.T) {
 				else { "nope" }`,
 		out: model.NewStringValue("nope"),
 	}.run)
+
+	t.Run("false condition no else returns null", testCase{
+		s:   `if (false) { "yes" }`,
+		out: model.NewNullValue(),
+	}.run)
+
+	t.Run("comparison false no else returns null", testCase{
+		s:   `if (1 > 2) { "yes" }`,
+		out: model.NewNullValue(),
+	}.run)
 }

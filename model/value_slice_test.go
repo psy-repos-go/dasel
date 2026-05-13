@@ -195,3 +195,62 @@ func TestSlice(t *testing.T) {
 	t.Run("standard slice", runTests(standardSlice))
 	t.Run("model slice", runTests(modelSlice))
 }
+
+func TestSliceIndexRange_Reverse(t *testing.T) {
+	s := model.NewSliceValue()
+	_ = s.Append(model.NewStringValue("a"))
+	_ = s.Append(model.NewStringValue("b"))
+	_ = s.Append(model.NewStringValue("c"))
+
+	got, err := s.SliceIndexRange(2, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	l, err := got.SliceLen()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if l != 3 {
+		t.Fatalf("expected 3 elements, got %d", l)
+	}
+	first, _ := got.GetSliceIndex(0)
+	sv, _ := first.StringValue()
+	if sv != "c" {
+		t.Errorf("expected 'c' first, got %s", sv)
+	}
+}
+
+func TestSlice_Append_BranchValue(t *testing.T) {
+	branch := model.NewSliceValue()
+	_ = branch.Append(model.NewIntValue(1))
+	_ = branch.Append(model.NewIntValue(2))
+	branch.MarkAsBranch()
+
+	target := model.NewSliceValue()
+	if err := target.Append(branch); err != nil {
+		t.Fatal(err)
+	}
+	l, err := target.SliceLen()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Branch items should be appended individually
+	if l != 2 {
+		t.Errorf("expected 2 items from branch append, got %d", l)
+	}
+}
+
+func TestSlice_GetSliceIndex_OutOfRange(t *testing.T) {
+	s := model.NewSliceValue()
+	_ = s.Append(model.NewIntValue(1))
+
+	_, err := s.GetSliceIndex(5)
+	if err == nil {
+		t.Fatal("expected error for out of range index")
+	}
+
+	_, err = s.GetSliceIndex(-1)
+	if err == nil {
+		t.Fatal("expected error for negative index")
+	}
+}

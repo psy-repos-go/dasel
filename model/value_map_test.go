@@ -151,3 +151,64 @@ func TestMap(t *testing.T) {
 	t.Run("dencoding map", runTests(dencodingMap))
 	t.Run("model map", runTests(modelMap))
 }
+
+func TestMapCopy(t *testing.T) {
+	orig := model.NewValue(orderedmap.NewMap().Set("a", "one").Set("b", "two"))
+	cp, err := orig.MapCopy()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Modify original
+	if err := orig.SetMapKey("a", model.NewStringValue("modified")); err != nil {
+		t.Fatal(err)
+	}
+	// Copy should be unchanged
+	val, err := cp.GetMapKey("a")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := val.StringValue()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != "one" {
+		t.Errorf("expected 'one', got %s", got)
+	}
+}
+
+func TestMapKeyExists(t *testing.T) {
+	m := model.NewValue(orderedmap.NewMap().Set("exists", "val"))
+
+	t.Run("existing key", func(t *testing.T) {
+		ok, err := m.MapKeyExists("exists")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !ok {
+			t.Error("expected key to exist")
+		}
+	})
+	t.Run("missing key", func(t *testing.T) {
+		ok, err := m.MapKeyExists("missing")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if ok {
+			t.Error("expected key to not exist")
+		}
+	})
+}
+
+func TestMapKeyValues(t *testing.T) {
+	m := model.NewValue(orderedmap.NewMap().Set("a", "one").Set("b", "two"))
+	kvs, err := m.MapKeyValues()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(kvs) != 2 {
+		t.Fatalf("expected 2 key-value pairs, got %d", len(kvs))
+	}
+	if kvs[0].Key != "a" || kvs[1].Key != "b" {
+		t.Errorf("unexpected keys: %s, %s", kvs[0].Key, kvs[1].Key)
+	}
+}

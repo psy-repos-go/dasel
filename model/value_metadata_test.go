@@ -27,3 +27,14 @@ func TestValue_IsSpread(t *testing.T) {
 		t.Errorf("expected %v, got %v", exp, got)
 	}
 }
+
+func TestValue_IsIgnore(t *testing.T) {
+	val := model.NewNullValue()
+	if exp, got := false, val.IsIgnore(); exp != got {
+		t.Errorf("expected %v, got %v", exp, got)
+	}
+	val.MarkAsIgnore()
+	if exp, got := true, val.IsIgnore(); exp != got {
+		t.Errorf("expected %v, got %v", exp, got)
+	}
+}

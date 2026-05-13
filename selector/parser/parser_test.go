@@ -729,4 +729,141 @@ func TestParser_Parse_HappyPath(t *testing.T) {
 			),
 		}.run)
 	})
+
+	t.Run("groupBy", func(t *testing.T) {
+		t.Run("simple property", happyTestCase{
+			input: "groupBy(name)",
+			expected: ast.GroupByExpr{
+				Expr: ast.PropertyExpr{Property: ast.StringExpr{Value: "name"}},
+			},
+		}.run)
+	})
+
+	t.Run("reduce", func(t *testing.T) {
+		// reduce($this, 0, $acc + $this)
+		t.Run("sum", happyTestCase{
+			input: "reduce($this, 0, $acc + $this)",
+			expected: ast.ReduceExpr{
+				Expr: ast.VariableExpr{Name: "this"},
+				Init: ast.NumberIntExpr{Value: 0},
+				Update: ast.BinaryExpr{
+					Left:     ast.VariableExpr{Name: "acc"},
+					Operator: lexer.Token{Kind: lexer.Plus, Value: "+", Pos: 22, Len: 1},
+					Right:    ast.VariableExpr{Name: "this"},
+				},
+			},
+		}.run)
+	})
+
+	t.Run("mapValues", func(t *testing.T) {
+		t.Run("multiply", happyTestCase{
+			input: "mapValues($this * 2)",
+			expected: ast.MapValuesExpr{
+				Expr: ast.BinaryExpr{
+					Left:     ast.VariableExpr{Name: "this"},
+					Operator: lexer.Token{Kind: lexer.Star, Value: "*", Pos: 16, Len: 1},
+					Right:    ast.NumberIntExpr{Value: 2},
+				},
+			},
+		}.run)
+	})
+
+	t.Run("sortBy", func(t *testing.T) {
+		t.Run("ascending", happyTestCase{
+			input: "sortBy(age)",
+			expected: ast.SortByExpr{
+				Expr:       ast.PropertyExpr{Property: ast.StringExpr{Value: "age"}},
+				Descending: false,
+			},
+		}.run)
+		t.Run("descending", happyTestCase{
+			input: "sortBy(age, desc)",
+			expected: ast.SortByExpr{
+				Expr:       ast.PropertyExpr{Property: ast.StringExpr{Value: "age"}},
+				Descending: true,
+			},
+		}.run)
+	})
+
+	t.Run("each", func(t *testing.T) {
+		t.Run("add one", happyTestCase{
+			input: "each($this + 1)",
+			expected: ast.EachExpr{
+				Expr: ast.BinaryExpr{
+					Left:     ast.VariableExpr{Name: "this"},
+					Operator: lexer.Token{Kind: lexer.Plus, Value: "+", Pos: 11, Len: 1},
+					Right:    ast.NumberIntExpr{Value: 1},
+				},
+			},
+		}.run)
+	})
+
+	t.Run("array literal", func(t *testing.T) {
+		t.Run("simple", happyTestCase{
+			input: "[1, 2, 3]",
+			expected: ast.ArrayExpr{
+				Exprs: ast.Expressions{
+					ast.NumberIntExpr{Value: 1},
+					ast.NumberIntExpr{Value: 2},
+					ast.NumberIntExpr{Value: 3},
+				},
+			},
+		}.run)
+	})
+
+	t.Run("search", func(t *testing.T) {
+		t.Run("with has", happyTestCase{
+			input: `search(has("x"))`,
+			expected: ast.SearchExpr{
+				Expr: ast.CallExpr{
+					Function: "has",
+					Args:     ast.Expressions{ast.StringExpr{Value: "x"}},
+				},
+			},
+		}.run)
+	})
+
+	t.Run("recursive descent", func(t *testing.T) {
+		t.Run("property", happyTestCase{
+			input: "..name",
+			expected: ast.RecursiveDescentExpr{
+				IsWildcard: false,
+				Expr:       ast.PropertyExpr{Property: ast.StringExpr{Value: "name"}},
+			},
+		}.run)
+		t.Run("wildcard", happyTestCase{
+			input: "..*",
+			expected: ast.RecursiveDescentExpr{
+				IsWildcard: true,
+			},
+		}.run)
+	})
+
+	t.Run("regex in binary expr", func(t *testing.T) {
+		t.Run("like operator", func(t *testing.T) {
+			input := `name =~ r/foo.*/`
+			tokens, err := lexer.NewTokenizer(input).Tokenize()
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := parser.NewParser(tokens).Parse()
+			if err != nil {
+				t.Fatal(err)
+			}
+			binExpr, ok := got.(ast.BinaryExpr)
+			if !ok {
+				t.Fatalf("expected BinaryExpr, got %T", got)
+			}
+			if binExpr.Operator.Kind != lexer.Like {
+				t.Errorf("expected Like operator, got %v", binExpr.Operator.Kind)
+			}
+			regexExpr, ok := binExpr.Right.(ast.RegexExpr)
+			if !ok {
+				t.Fatalf("expected RegexExpr on right, got %T", binExpr.Right)
+			}
+			if regexExpr.Regex.String() != `foo.*` {
+				t.Errorf("expected regex 'foo.*', got %s", regexExpr.Regex.String())
+			}
+		})
+	})
 }
