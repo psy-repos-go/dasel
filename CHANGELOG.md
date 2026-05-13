@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `groupBy(expr)` function to group array elements by a derived key expression, producing a map of key to matching elements.
+- `reduce(expr, init, update)` function for folding arrays into a single value using an accumulator (`$acc`).
+- `mapValues(expr)` function for transforming all values of a map/object while preserving keys.
 
 ## [v3.8.1] - 2026-04-30
 
