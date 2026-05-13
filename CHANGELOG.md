@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed a non-terminating loop in the selector lexer when tokenizing unterminated regex patterns (e.g. `r/abc`). The tokenizer now returns an error instead of looping indefinitely.
 - Fix panic when selector query contains a trailing backslash in a quoted string ([GHSA-m5j3-4634-c2vq](https://github.com/TomWright/dasel/security/advisories/GHSA-m5j3-4634-c2vq)).
 
 ## [v3.10.0] - 2026-05-13

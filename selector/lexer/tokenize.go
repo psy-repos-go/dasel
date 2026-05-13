@@ -271,17 +271,20 @@ func (p *Tokenizer) parseCurRune() (Token, error) {
 			return ptr.To(NewToken(kind, other, pos, l))
 		}
 
-		matchRegexPattern := func(pos int) *Token {
+		matchRegexPattern := func(pos int) (*Token, error) {
 			if p.src[pos] != 'r' || !p.peekRuneEqual(pos+1, '/') {
-				return nil
+				return nil, nil
 			}
 			start := pos
 			pos += 2
-			for !p.peekRuneEqual(pos, '/') {
+			for pos < p.srcLen && p.src[pos] != '/' {
 				pos++
 			}
+			if pos >= p.srcLen {
+				return nil, &UnexpectedEOFError{Pos: pos}
+			}
 			pos++
-			return ptr.To(NewToken(RegexPattern, p.src[start+2:pos-1], start, pos-start))
+			return ptr.To(NewToken(RegexPattern, p.src[start+2:pos-1], start, pos-start)), nil
 		}
 
 		if t := matchStr(pos, "null", true, Null); t != nil {
@@ -345,7 +348,10 @@ func (p *Tokenizer) parseCurRune() (Token, error) {
 			return *t, nil
 		}
 
-		if t := matchRegexPattern(pos); t != nil {
+		if t, err := matchRegexPattern(pos); t != nil || err != nil {
+			if err != nil {
+				return Token{}, err
+			}
 			return *t, nil
 		}
 

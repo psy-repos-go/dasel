@@ -181,5 +181,13 @@ func TestTokenizer_Parse(t *testing.T) {
 			in:    `'\`,
 			match: matchUnexpectedEOFError(2),
 		}.run)
+		t.Run("unterminated regex", errTestCase{
+			in:    `r/unterminated`,
+			match: matchUnexpectedEOFError(14),
+		}.run)
+		t.Run("unterminated regex minimal", errTestCase{
+			in:    `r/`,
+			match: matchUnexpectedEOFError(2),
+		}.run)
 	})
 }
