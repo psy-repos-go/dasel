@@ -202,6 +202,10 @@ func (p *Tokenizer) parseCurRune() (Token, error) {
 				// Handle escape characters.
 				pos++
 
+				if pos >= p.srcLen {
+					return Token{}, &UnexpectedEOFError{Pos: pos}
+				}
+
 				if p.peekRuneMatches(pos, func(r rune) bool {
 					_, ok := escapeCharacters[r]
 					return ok

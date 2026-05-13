@@ -173,5 +173,13 @@ func TestTokenizer_Parse(t *testing.T) {
 			in:    `'hello`,
 			match: matchUnexpectedEOFError(6),
 		}.run)
+		t.Run("trailing backslash in double quote", errTestCase{
+			in:    `"\`,
+			match: matchUnexpectedEOFError(2),
+		}.run)
+		t.Run("trailing backslash in single quote", errTestCase{
+			in:    `'\`,
+			match: matchUnexpectedEOFError(2),
+		}.run)
 	})
 }
