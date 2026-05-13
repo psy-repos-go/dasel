@@ -151,7 +151,7 @@ const manPageTmpl = `.TH {{.Name}} 1 "{{.Date}}" "{{.Version}}" "{{.Name}} Manua
 .SH DESCRIPTION
 .B {{.Name | toLower}}
 is a command-line tool for querying and modifying data structures.
-It supports multiple data formats including JSON, YAML, TOML, CSV, and XML.
+It supports multiple data formats including JSON, YAML, TOML, CSV, XML, and KDL.
 .SH COMMANDS
 {{range .Subcommands}}.TP
 .B {{.Name}}
