@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.10.0] - 2026-05-13
+
 ### Added
 
-- KDL format support (`-i kdl` / `-o kdl`) for reading and writing [KDL](https://kdl.dev/) configuration files (#504). Supports both v1 and v2 syntax with automatic version detection.
+- KDL format support (`-i kdl` / `-o kdl`) for reading and writing [KDL](https://kdl.dev/) configuration files (#504). Supports both v1 and v2 syntax with automatic version detection. Output version is configurable via `--write-flag kdl-version=1` or `--write-flag kdl-version=2` (default).
 
 ## [v3.9.0] - 2026-05-13
 
@@ -877,7 +879,8 @@ See [documentation](https://daseldocs.tomwright.me) for all changes.
 
 - Everything!
 
-[unreleased]: https://github.com/TomWright/dasel/compare/v3.9.0...HEAD
+[unreleased]: https://github.com/TomWright/dasel/compare/v3.10.0...HEAD
+[v3.10.0]: https://github.com/TomWright/dasel/compare/v3.9.0...v3.10.0
 [v3.9.0]: https://github.com/TomWright/dasel/compare/v3.8.1...v3.9.0
 [v3.8.1]: https://github.com/TomWright/dasel/compare/v3.8.0...v3.8.1
 [v3.8.0]: https://github.com/TomWright/dasel/compare/v3.7.0...v3.8.0
