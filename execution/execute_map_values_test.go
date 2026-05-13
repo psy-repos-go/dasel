@@ -81,6 +81,22 @@ func TestMapValues(t *testing.T) {
 		}
 	})
 
+	t.Run("mapValues with $key", testCase{
+		inFn: func() *model.Value {
+			res := model.NewMapValue()
+			_ = res.SetMapKey("a", model.NewIntValue(1))
+			_ = res.SetMapKey("b", model.NewIntValue(2))
+			return res
+		},
+		s: `mapValues($key)`,
+		outFn: func() *model.Value {
+			res := model.NewMapValue()
+			_ = res.SetMapKey("a", model.NewStringValue("a"))
+			_ = res.SetMapKey("b", model.NewStringValue("b"))
+			return res
+		},
+	}.run)
+
 	t.Run("chaining after mapValues", testCase{
 		inFn: func() *model.Value {
 			res := model.NewMapValue()

@@ -78,6 +78,26 @@ func TestFuncSortBy(t *testing.T) {
 		},
 	))
 
+	t.Run("sort by $key descending reverses", func(t *testing.T) {
+		testCase{
+			inFn: func() *model.Value {
+				res := model.NewSliceValue()
+				_ = res.Append(model.NewIntValue(10))
+				_ = res.Append(model.NewIntValue(20))
+				_ = res.Append(model.NewIntValue(30))
+				return res
+			},
+			s: `sortBy($key, desc)`,
+			outFn: func() *model.Value {
+				res := model.NewSliceValue()
+				_ = res.Append(model.NewIntValue(30))
+				_ = res.Append(model.NewIntValue(20))
+				_ = res.Append(model.NewIntValue(10))
+				return res
+			},
+		}.run(t)
+	})
+
 	t.Run("float", runSortTests(
 		func() *model.Value {
 			res := model.NewSliceValue()

@@ -24,6 +24,16 @@ func TestEach(t *testing.T) {
 		},
 	}.run)
 
+	t.Run("each with $key", testCase{
+		s: "[10,20,30].each($this = $this + $key)",
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(10))
+			_ = s.Append(model.NewIntValue(21))
+			_ = s.Append(model.NewIntValue(32))
+			return s
+		},
+	}.run)
 	t.Run("multiply each element", testCase{
 		s: "[2,3,4].each($this = $this * 2)",
 		outFn: func() *model.Value {

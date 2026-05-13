@@ -95,4 +95,24 @@ func TestFilter(t *testing.T) {
 			return s
 		},
 	}.run)
+	t.Run("filter by $key", testCase{
+		inFn: inSlice,
+		s:    "filter($key >= 1)",
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(2))
+			_ = s.Append(model.NewIntValue(3))
+			return s
+		},
+	}.run)
+	t.Run("filter by $key and $this", testCase{
+		inFn: inSlice,
+		s:    "filter($key == 0 || $this == 3)",
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(1))
+			_ = s.Append(model.NewIntValue(3))
+			return s
+		},
+	}.run)
 }

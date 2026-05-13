@@ -23,6 +23,9 @@ func sortByExprExecutor(e ast.SortByExpr) (expressionExecutor, error) {
 		values := make([]sortableValue, 0)
 
 		if err := data.RangeSlice(func(i int, item *model.Value) error {
+			restore := withKeyVar(options, model.NewIntValue(int64(i)))
+			defer restore()
+
 			item, err := ExecuteAST(ctx, e.Expr, item, options)
 			if err != nil {
 				return err

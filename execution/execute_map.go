@@ -17,6 +17,9 @@ func mapExprExecutor(e ast.MapExpr) (expressionExecutor, error) {
 		res := model.NewSliceValue()
 
 		if err := data.RangeSlice(func(i int, item *model.Value) error {
+			restore := withKeyVar(options, model.NewIntValue(int64(i)))
+			defer restore()
+
 			item, err := ExecuteAST(ctx, e.Expr, item, options)
 			if err != nil {
 				return err

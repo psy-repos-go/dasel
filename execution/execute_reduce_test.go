@@ -95,6 +95,18 @@ func TestReduce(t *testing.T) {
 		out: model.NewIntValue(24),
 	}.run)
 
+	t.Run("reduce with $key", testCase{
+		inFn: func() *model.Value {
+			res := model.NewSliceValue()
+			_ = res.Append(model.NewStringValue("a"))
+			_ = res.Append(model.NewStringValue("b"))
+			_ = res.Append(model.NewStringValue("c"))
+			return res
+		},
+		s:   `reduce($this, 0, $acc + $key)`,
+		out: model.NewIntValue(3), // 0+0+1+2
+	}.run)
+
 	t.Run("single element", testCase{
 		inFn: func() *model.Value {
 			res := model.NewSliceValue()

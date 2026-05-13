@@ -16,6 +16,9 @@ func eachExprExecutor(e ast.EachExpr) (expressionExecutor, error) {
 		}
 
 		if err := data.RangeSlice(func(i int, item *model.Value) error {
+			restore := withKeyVar(options, model.NewIntValue(int64(i)))
+			defer restore()
+
 			_, err := ExecuteAST(ctx, e.Expr, item, options)
 			if err != nil {
 				return err

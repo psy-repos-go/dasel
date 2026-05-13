@@ -64,6 +64,23 @@ func TestRecursiveDescent(t *testing.T) {
 		},
 	}.run)
 
+	t.Run("wildcard with $key available", testCase{
+		inFn: func() *model.Value {
+			return model.NewValue(
+				orderedmap.NewMap().
+					Set("a", "hello").
+					Set("b", "world"),
+			)
+		},
+		s: `..*`,
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewStringValue("hello"))
+			_ = s.Append(model.NewStringValue("world"))
+			return s
+		},
+	}.run)
+
 	t.Run("key not found returns empty", testCase{
 		inFn: func() *model.Value {
 			return model.NewValue(

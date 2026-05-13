@@ -21,6 +21,24 @@ func TestMap(t *testing.T) {
 			return model.NewValue([]any{1, 2, 3})
 		},
 	}.run)
+	t.Run("map $key returns indices", testCase{
+		inFn: func() *model.Value {
+			return model.NewValue([]any{10, 20, 30})
+		},
+		s: `map($key)`,
+		outFn: func() *model.Value {
+			return model.NewValue([]any{0, 1, 2})
+		},
+	}.run)
+	t.Run("map $key + $this", testCase{
+		inFn: func() *model.Value {
+			return model.NewValue([]any{10, 20, 30})
+		},
+		s: `map($key + $this)`,
+		outFn: func() *model.Value {
+			return model.NewValue([]any{10, 21, 32})
+		},
+	}.run)
 	t.Run("with chain of selectors", testCase{
 		inFn: func() *model.Value {
 			return model.NewValue([]any{

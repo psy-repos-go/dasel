@@ -32,6 +32,9 @@ func reduceExprExecutor(e ast.ReduceExpr) (expressionExecutor, error) {
 		}()
 
 		if err := data.RangeSlice(func(i int, item *model.Value) error {
+			restore := withKeyVar(options, model.NewIntValue(int64(i)))
+			defer restore()
+
 			// Evaluate the per-element expression against the item.
 			elemVal, err := ExecuteAST(ctx, e.Expr, item, options)
 			if err != nil {

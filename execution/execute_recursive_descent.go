@@ -38,6 +38,9 @@ func recursiveDescentExprExecutor2(e ast.RecursiveDescentExpr) (expressionExecut
 		switch data.Type() {
 		case model.TypeMap:
 			if err := data.RangeMap(func(key string, v *model.Value) error {
+				restore := withKeyVar(options, model.NewStringValue(key))
+				defer restore()
+
 				if v.IsScalar() {
 					if e.IsWildcard {
 						res = append(res, v)
@@ -65,6 +68,9 @@ func recursiveDescentExprExecutor2(e ast.RecursiveDescentExpr) (expressionExecut
 			}
 		case model.TypeSlice:
 			if err := data.RangeSlice(func(i int, v *model.Value) error {
+				restore := withKeyVar(options, model.NewIntValue(int64(i)))
+				defer restore()
+
 				if v.IsScalar() {
 					if e.IsWildcard {
 						res = append(res, v)

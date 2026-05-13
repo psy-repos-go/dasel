@@ -18,6 +18,9 @@ func mapValuesExprExecutor(e ast.MapValuesExpr) (expressionExecutor, error) {
 		res := model.NewMapValue()
 
 		if err := data.RangeMap(func(key string, value *model.Value) error {
+			restore := withKeyVar(options, model.NewStringValue(key))
+			defer restore()
+
 			transformed, err := ExecuteAST(ctx, e.Expr, value, options)
 			if err != nil {
 				return fmt.Errorf("error evaluating mapValues expr for key %q: %w", key, err)

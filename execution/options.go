@@ -54,3 +54,17 @@ func WithoutUnstable() ExecuteOptionFn {
 		o.Unstable = false
 	}
 }
+
+// withKeyVar sets the $key variable to the given value and returns a function
+// that restores the previous value (or deletes it if it didn't exist).
+func withKeyVar(options *Options, key *model.Value) func() {
+	prev, had := options.Vars["key"]
+	options.Vars["key"] = key
+	return func() {
+		if had {
+			options.Vars["key"] = prev
+		} else {
+			delete(options.Vars, "key")
+		}
+	}
+}

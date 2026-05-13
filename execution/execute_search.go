@@ -46,6 +46,9 @@ func searchExprExecutor(e ast.SearchExpr) (expressionExecutor, error) {
 		switch data.Type() {
 		case model.TypeMap:
 			if err := data.RangeMap(func(key string, v *model.Value) error {
+				restore := withKeyVar(options, model.NewStringValue(key))
+				defer restore()
+
 				match, err := processValue(ctx, v, options)
 				if err != nil {
 					return err
@@ -67,6 +70,9 @@ func searchExprExecutor(e ast.SearchExpr) (expressionExecutor, error) {
 			}
 		case model.TypeSlice:
 			if err := data.RangeSlice(func(i int, v *model.Value) error {
+				restore := withKeyVar(options, model.NewIntValue(int64(i)))
+				defer restore()
+
 				match, err := processValue(ctx, v, options)
 				if err != nil {
 					return err

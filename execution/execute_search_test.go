@@ -43,6 +43,37 @@ func TestSearch(t *testing.T) {
 		},
 	}.run)
 
+	t.Run("search with $key on map", testCase{
+		inFn: func() *model.Value {
+			m := model.NewMapValue()
+			_ = m.SetMapKey("other", model.NewIntValue(1))
+			_ = m.SetMapKey("target", model.NewIntValue(42))
+			return m
+		},
+		s: `search($key == "target")`,
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(42))
+			return s
+		},
+	}.run)
+
+	t.Run("search with $key on slice", testCase{
+		inFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(10))
+			_ = s.Append(model.NewIntValue(20))
+			_ = s.Append(model.NewIntValue(30))
+			return s
+		},
+		s: `search($key == 1)`,
+		outFn: func() *model.Value {
+			s := model.NewSliceValue()
+			_ = s.Append(model.NewIntValue(20))
+			return s
+		},
+	}.run)
+
 	t.Run("no matches returns empty", testCase{
 		inFn: func() *model.Value {
 			return model.NewValue([]any{

@@ -54,4 +54,12 @@ func TestAnyExpr(t *testing.T) {
 		s:   `[1, 2, 3, 4, 5].filter($this > 2).any($this > 4)`,
 		out: model.NewBoolValue(true),
 	}.run)
+	t.Run("any with $key", testCase{
+		s:   `[10, 20, 30].any($key == 2)`,
+		out: model.NewBoolValue(true),
+	}.run)
+	t.Run("any with $key no match", testCase{
+		s:   `[10, 20, 30].any($key == 5)`,
+		out: model.NewBoolValue(false),
+	}.run)
 }

@@ -54,4 +54,12 @@ func TestAllExpr(t *testing.T) {
 		s:   `[1, 2, 3, 4, 5].filter($this > 2).all($this > 2)`,
 		out: model.NewBoolValue(true),
 	}.run)
+	t.Run("all with $key true", testCase{
+		s:   `[10, 20, 30].all($key < 3)`,
+		out: model.NewBoolValue(true),
+	}.run)
+	t.Run("all with $key false", testCase{
+		s:   `[10, 20, 30].all($key < 2)`,
+		out: model.NewBoolValue(false),
+	}.run)
 }

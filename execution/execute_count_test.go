@@ -51,4 +51,8 @@ func TestCountExpr(t *testing.T) {
 		s:   `[1, 2, 3, 4, 5].filter($this > 2).count($this > 4)`,
 		out: model.NewIntValue(1),
 	}.run)
+	t.Run("count with $key", testCase{
+		s:   `[10, 20, 30].count($key > 0)`,
+		out: model.NewIntValue(2),
+	}.run)
 }

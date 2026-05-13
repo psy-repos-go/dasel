@@ -18,6 +18,9 @@ func groupByExprExecutor(e ast.GroupByExpr) (expressionExecutor, error) {
 		res := model.NewMapValue()
 
 		if err := data.RangeSlice(func(i int, item *model.Value) error {
+			restore := withKeyVar(options, model.NewIntValue(int64(i)))
+			defer restore()
+
 			keyVal, err := ExecuteAST(ctx, e.Expr, item, options)
 			if err != nil {
 				return err

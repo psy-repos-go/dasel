@@ -242,6 +242,30 @@ func TestGroupBy(t *testing.T) {
 		},
 	}.run)
 
+	t.Run("group by $key", testCase{
+		inFn: func() *model.Value {
+			res := model.NewSliceValue()
+			_ = res.Append(model.NewStringValue("a"))
+			_ = res.Append(model.NewStringValue("b"))
+			_ = res.Append(model.NewStringValue("c"))
+			return res
+		},
+		s: `groupBy($key)`,
+		outFn: func() *model.Value {
+			res := model.NewMapValue()
+			s0 := model.NewSliceValue()
+			_ = s0.Append(model.NewStringValue("a"))
+			_ = res.SetMapKey("0", s0)
+			s1 := model.NewSliceValue()
+			_ = s1.Append(model.NewStringValue("b"))
+			_ = res.SetMapKey("1", s1)
+			s2 := model.NewSliceValue()
+			_ = s2.Append(model.NewStringValue("c"))
+			_ = res.SetMapKey("2", s2)
+			return res
+		},
+	}.run)
+
 	t.Run("non-slice input errors", func(t *testing.T) {
 		in := model.NewStringValue("not a slice")
 		_, err := execution.ExecuteSelector(context.Background(), `groupBy($this)`, in, execution.NewOptions())
