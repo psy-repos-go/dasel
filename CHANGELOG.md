@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.9.0] - 2026-05-13
+
 ### Added
 
 - `groupBy(expr)` function to group array elements by a derived key expression, producing a map of key to matching elements.
@@ -871,7 +873,8 @@ See [documentation](https://daseldocs.tomwright.me) for all changes.
 
 - Everything!
 
-[unreleased]: https://github.com/TomWright/dasel/compare/v3.8.1...HEAD
+[unreleased]: https://github.com/TomWright/dasel/compare/v3.9.0...HEAD
+[v3.9.0]: https://github.com/TomWright/dasel/compare/v3.8.1...v3.9.0
 [v3.8.1]: https://github.com/TomWright/dasel/compare/v3.8.0...v3.8.1
 [v3.8.0]: https://github.com/TomWright/dasel/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/TomWright/dasel/compare/v3.6.0...v3.7.0
