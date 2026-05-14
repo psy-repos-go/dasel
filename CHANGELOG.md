@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Strip leading "v" from version output for consistency across build methods (Docker vs Homebrew).
+
 ## [v3.10.1] - 2026-05-13
 
 ### Fixed
